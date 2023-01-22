@@ -18,22 +18,29 @@ class proses
         double E = input.nextDouble();
         System.out.print("masukkan nilai F = ");
         double F = input.nextDouble();
+        System.out.print("masukkan batas iterasi = ");
+        double batas_iterasi = input.nextDouble();
+        System.out.print("masukkan nilai error   = ");
+        double batas_error = input.nextDouble();
 
         System.out.println("f(x)    = " + A + "x^" + B + " + " + C + "x^" + D + " + " + E + "x" + " + " + F );
-        proses_awal(A,B,C,D,E,F);
+        input_x1_dan_x2(A,B,C,D,E,F,1,batas_iterasi,batas_error);
 
     }
 
-    public void proses_awal(double A, double B, double C, double D, double E, double F)
+    public void input_x1_dan_x2(double A, double B, double C, double D, double E, double F, double iterasi_ke,double batas_iterasi, double batas_error)
     {
-        double proses_fx_1_B = 1, proses_fx_1_D = 1,  proses_fx_2_B = 1, proses_fx_2_D = 1;
         System.out.print("masukkan x1 = ");
         double x1 = input.nextDouble();
         System.out.print("masukkan x2 = ");
         double x2 = input.nextDouble();
-        System.out.print("masukkan batas iterasi = ");
-        double batas_iterasi = input.nextDouble();
+        proses_awal(A,B,C,D,E,F,iterasi_ke,batas_iterasi,x1,x2, batas_error);
+    }
 
+    public void proses_awal(double A, double B, double C, double D, double E, double F, double iterasi_ke,double batas_iterasi, double x1,  double x2, double batas_error)
+    {
+        System.out.println("iterasi ke - "+ iterasi_ke);
+        double proses_fx_1_B = 1, proses_fx_1_D = 1,  proses_fx_2_B = 1, proses_fx_2_D = 1;
 
         for (int perulangan = 0; perulangan < B ; perulangan++)
         {
@@ -59,16 +66,16 @@ class proses
 
         if (proses_perbandingan == true)
         {
-            iterasi_pertama(A,B,C,D,E,F,x1,x2,proses_fx_1,proses_fx_2);
+            proses_selanjutnya(A,B,C,D,E,F,x1,x2,proses_fx_1,proses_fx_2,iterasi_ke,batas_iterasi, batas_error);
         }
         else
         {
             System.out.println("tidak memenuhi syarat");
-            proses_awal(A, B, C, D, E, F);
+            input_x1_dan_x2(A,B,C,D,E,F,iterasi_ke,batas_iterasi,batas_error);
         }
     }
 
-    void iterasi_pertama(double A, double B, double C, double D, double E, double F,double x1,double x2,double proses_fx_1, double proses_fx_2 )
+    void proses_selanjutnya(double A, double B, double C, double D, double E, double F,double x1,double x2,double proses_fx_1, double proses_fx_2,double iterasi_ke,double batas_iterasi ,double batas_error)
     {
         double proses_fx_3_B = 1, proses_fx_3_D = 1;
         double segitiga_x = x2 - x1;
@@ -84,20 +91,25 @@ class proses
         for (int perulangan = 0; perulangan < D ; perulangan++)
         {
             proses_fx_3_D = proses_fx_3_D * x3;
-
         }
 
         double proses_fx_3 = A*proses_fx_3_B+C*proses_fx_3_D+E*x1+F;
+        System.out.println("x3  = " + x3);
+        System.out.println("fx3 = " + proses_fx_3);
+        double proses_evaluasi = (proses_fx_3 * proses_fx_1);
+        boolean evaluasi =  proses_evaluasi < batas_error;
 
-        boolean evaluasi = (proses_fx_3 * proses_fx_1) <0;
-
-        if (evaluasi == true)
+        if (batas_error > proses_evaluasi  || iterasi_ke == 3)
         {
             System.out.println("stop");
         }
+        else if (evaluasi ==true)
+        {
+            proses_awal(A,B,C,D,E,F,iterasi_ke+1,batas_iterasi,x1, x3,batas_error);
+        }
         else
         {
-            System.out.println("lanjut lagi iterasi berikutnya");
+            proses_awal(A,B,C,D,E,F,iterasi_ke+1,batas_iterasi,x3, x2,batas_error);
         }
 
     }
